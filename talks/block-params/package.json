@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "name": "block-params",
+  "scripts": {
+    "start": "fusuma start",
+    "build": "fusuma build"
+  },
+  "devDependencies": {
+    "fusuma": "^1.15.0"
+  }
+}

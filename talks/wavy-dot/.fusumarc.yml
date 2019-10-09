@@ -1,0 +1,28 @@
+meta:
+  url: https://tsuyoshiwada.github.io/tc39_study_201910/wavy-dot/
+  title: 'Wavy Dot - #tc39_study TC39 Proposals LT 大会'
+  thumbnail: https://github.com/tsuyoshiwada/tc39_study_201910/raw/master/docs/images/ogp.jpg
+  author: wadackel
+  description:
+  sns:
+    - twitter
+slide:
+  loop: false
+  sidebar: true
+  targetBlank: true
+  showIndex: true
+  isVertical: false
+  code:
+    languages:
+      - javascript
+    plugins:
+      - line-highlight
+    theme: tomorrow
+  chart: false
+  math: false
+extends:
+  js:
+  css: ../common/style.css
+  webpack:
+build:
+  ssr: true
