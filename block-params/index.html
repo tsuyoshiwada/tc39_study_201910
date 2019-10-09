@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-type" content="text/html; charset=utf-8"><meta name="theme-color" content="#3498db"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Block Params -</title><meta property="og:title" content="Block Params -"><meta property="og:type" content="article"><link href="vendor.6.b62166092f6f7af6c04d.css" rel="stylesheet"><link href="main.3.fbc0c98fcb7fc319d029.css" rel="stylesheet"></head><body><div id="root"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" class="btn-sidebar" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg><article id="webslides"><section class="aligncenter fullscreen title"><div class="wrap"><div class="content-left"><h1>Block Params</h1><p class="text-intro">A syntactical simplification in JS to enable DSLs</p><ul class="description"><li><strong>Stage</strong>:<!-- --> 1</li><li><strong>Repository</strong>:<!-- --> <a href="https://github.com/samuelgoto/proposal-block-params" target="_blank" rel="noopener noreferrer">samuelgoto/proposal-block-params</a></li><li><strong>Date</strong>: 2019/10/09</li><li><strong>#tc39_study</strong>: TC39 Proposals LT 大会</li></ul></div></div></section><section class="aligncenter about"><div class="wrap"><div class="cta"><div class="number"><img src="https://avatars0.githubusercontent.com/u/5393238?s=460&amp;v=4" width="200" height="200"></div><div class="benefit"><p class="text-subtitle">About me</p><h3>わだまる / tsuyoshiwada</h3><p class="text-intro">Web Developer (CyberAgent CATS).<br>GitHub:<!-- --> <a href="https://github.com/tsuyoshiwada" target="_blank" rel="noopener noreferrer">tsuyoshiwada</a>, Twitter:<!-- --> <a href="https://twitter.com/wadackel" target="_blank" rel="noopener noreferrer">@wadackel</a></p></div></div></div></section><section class="aligncenter current"><h2>Block Params とは ?</h2><p>Kotlin、Ruby、Groovy をインスパイアした構文の簡略化を実現する仕様です。<br><!-- -->(最近だと SwiftUI で注目を浴びたように思います)</p></section><section class="aligncenter"><h2>複数のパラメータをとる関数である場合</h2><p>関数呼び出しで最後のパラメータが関数の場合、括弧を省略しブロックのみを渡すことができます。</p><pre><code class="language-javascript">fn(1) {
+  // ...
+}
+</code></pre><p>👇</p><pre><code class="language-javascript">fn(1, () =&gt; {
+  // ...
+});
+</code></pre></section><section class="aligncenter"><h2>パラメータが単一の関数である場合</h2><p>呼び出す対象が単一の関数のみを受け取るシグネチャである場合、括弧を丸ごと省略することができる。</p><pre><code class="language-javascript">a {
+  // ...
+}
+</code></pre><p>👇</p><pre><code class="language-javascript">a(() =&gt; {
+  // ...
+});
+</code></pre></section><section class="aligncenter"><h2>ネスト</h2><p>Block Params のネストを有効にしたいが、現在まだ検討段階とのこと。</p></section><section class="aligncenter"><h3>親のブロックを参照する例</h3><pre><code class="language-javascript">a(1) {
+  ::b(2) {
+    // ...
+  }
+}
+</code></pre><p>👇</p><pre><code class="language-javascript">a(1, __parent__ =&gt; {
+  __parent__.b(2, __parent__ =&gt; {
+    // ...
+  });
+});
+</code></pre></section><section class="aligncenter"><h3>ブロックへと引数を渡す例</h3><pre><code class="language-javascript">a(1) do (foo) {
+  // ...
+}
+</code></pre><p>👇</p><pre><code class="language-javascript">a(1, foo =&gt; {
+  // ...
+});
+</code></pre></section><section class="aligncenter"><h2>ユースケース</h2><p>実際に使用した際のイメージを掴みやすくするサンプルコードを幾つか抜粋。</p></section><section class="aligncenter"><h3><code>Swift&#x27;s defer</code></h3><pre><code class="language-javascript">defer (100) {
+  // internally calls setTimeout(100)
+  alert(&quot;hello world&quot;);
+}
+</code></pre><p><a href="https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID514">Error Handling — The Swift Programming Language (Swift 5.1)</a></p></section><section class="aligncenter"><h3><code>C#&#x27;s foreach</code></h3><pre><code class="language-javascript">// works on arrays, maps and streams
+foreach (array) do (item) {
+  console.log(item);
+}
+</code></pre><p><a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/foreach-in">C# foreach statement | Microsoft Docs</a></p></section><section class="aligncenter"><h3><code>kotlin&#x27;s templates</code></h3><pre><code class="language-javascript">let body = html {
+  ::head {
+    ::title(&quot;Hello World!&quot;) {}
+  }
+  ::body {
+    ::div {
+      ::span(&quot;Welcome to my Blog!&quot;) {}
+    }
+    for (page of [&quot;contact&quot;, &quot;guestbook&quot;]) {
+      ::a({href: `${page}.html`}) { span(`${page}`) } {}
+    }
+  }
+}
+</code></pre><p><a href="https://kotlinlang.org/docs/reference/type-safe-builders.html">Type-Safe Builders - Kotlin Programming Language</a></p></section><section class="aligncenter"><h2>完了値の扱い</h2><p>Block Params が値を返す場合、<br><!-- -->呼び出し元の関数へと値を返すことが望ましい (Like Kotlin) が、<br><!-- -->どのようになるのかはまだ検討中。</p><pre><code class="language-javascript">let result = foreach (numbers) do (number) {
+  number * 2 // gets returned to foreach
+}
+</code></pre><p><a href="https://github.com/tc39/proposal-do-expressions">do expressions</a> や <a href="https://github.com/rbuckton/proposal-statements-as-expressions#compound-statements">statement-like expressions</a> のセマンティクスを借りたものが<br><!-- -->現実的な落とし所になりそう 🤔</p></section><section class="aligncenter"><h2>その他の検討事項</h2><p>既存の言語仕様との兼ね合いや、<br><!-- -->理想状態と実現方法の落とし所が見つかっていない部分を<br><!-- -->模索をしているように見えます。</p><ul><li>Scoping</li><li>Bindings</li><li><code>return</code></li><li><code>continue</code></li><li><code>break</code></li></ul></section><section class="aligncenter"><h2>もっとたくさんのサンプルコードが見たい</h2><p><a href="https://github.com/samuelgoto/proposal-block-params/tree/master/test">test</a> ディレクトリの中にあるコードが読んでいていて楽しいです。</p></section><section class="aligncenter"><h2>所感</h2><ul><li>遊び心のある構文で個人的には好き</li><li>簡略化された構文の上に、ユースケースによっては実用性 (可読性含む) が感じられる</li><li><a href="https://github.com/samuelgoto/proposal-block-params/commit/b7eb00a2d48c3d681d8277b44d6409c70d2f5de0">2017/08/04</a> に初めてまともなコミットがあってからも、まだまだ検討事項は多く見える</li></ul></section><section class="aligncenter"><h2>Related Proposal &amp; Discussion</h2><ul><li><a href="https://github.com/rbuckton/proposal-statements-as-expressions">Proposal to Explore ECMAScript Statements as Expressions</a></li><li><a href="https://github.com/tc39/proposal-do-expressions">ECMAScript proposal: do expressions</a></li><li><a href="https://web.archive.org/web/20161123223104/http://wiki.ecmascript.org/doku.php?id=strawman:block_lambda_revival">block lambdas</a></li><li><a href="http://wirfs-brock.com/allen/files/jshistory/continue-break-lambda.pdf">Allen&#x27;s considerations on break and continue</a></li><li><a href="http://yehudakatz.com/2012/01/10/javascript-needs-blocks/">javascript needs blocks by @wycats</a></li></ul></section><section class="aligncenter title"><h1>Thank you 🐶 !</h1></section></article></div><script type="text/javascript" src="runtime.f59c28b215b2e7876ede.bundle.js"></script><script type="text/javascript" src="vendor.6.b62166092f6f7af6c04d.bundle.js"></script><script type="text/javascript" src="main.3.fbc0c98fcb7fc319d029.bundle.js"></script></body></html>
